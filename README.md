@@ -1,5 +1,7 @@
+# شرح الحزمة 
+هذه الحزمة الهدف منها بدل ما المبرمج يتعب و يعمل البرنامج من الصفر ممكن يستغدم الحزمة ده 
+
 # php_start_kit
-الحزمة الاولية لاي مشروع php 
 
 * Build structer of the starter kit 
 * create index.php
