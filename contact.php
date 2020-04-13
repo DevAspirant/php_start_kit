@@ -1,5 +1,37 @@
 <?php 
 $title = "contact";
-require_once "template/header.php" ?>
-<h2> Welcome to contact page </h2>
+require_once "template/header.php";
+echo "information of the POST data";
+// print the output of POST data
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    echo "<pre>";
+    print_r($_POST);
+    print_r($_FILES);
+    echo "</pre>";
+}
+?>
+
+
+<h1> Welcome to <?php echo $title ?></h1>
+<!-- create a Contact Form  -->
+<!-- set the POST action and confirm the data was sent and encript the data  -->
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">Your name</label>
+        <input type="text" name="name" class="form-control" placeholder="your name"> 
+    </div>
+    <div class="form-group">
+        <label for="email">your email</label>
+        <input type="email" name="email" class="form-control" placeholder=" your email">
+    </div>
+    <div class="form-group">
+        <label for="document"> your document </label>
+        <input type="file" name="document">
+    </div>
+    <div class="form-group">
+        <label for="name"> your name </label>
+        <textarea name="message" class="form-control" placeholder="type your meesage"></textarea>
+    </div>
+    <button class="btn btn-primary">Send</button>
+</form>
 <?php require_once "template/footer.php" ?>
