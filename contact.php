@@ -1,16 +1,30 @@
 <?php 
 $title = "contact";
 require_once "template/header.php";
-echo "information of the POST data";
-// print the output of POST data
+echo "information of the POST data: ";
+/* print the output of POST data : if($_SERVER['REQUEST_METHOD'] == 'POST'){echo "<pre>";print_r($_POST);print_r($_FILES);echo "</pre>";}*/
+// validate the upload files 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    echo "<pre>";
-    print_r($_POST);
-    print_r($_FILES);
-    echo "</pre>";
+    if(isset($_FILES['document']) && $_FILES['document']['error'] == 0){
+        echo "the file is fine";
+        // allowed to upload the file types
+        $allowed = [
+            'jpg'=>'images/jpg',
+            'png'=>'images/png',
+            'gif'=>'images/gif'
+        ];
+
+        $fileType = $_FILES['document']['type'];
+        if(!in_array($fileType,$allowed)){
+            echo "<pre>";
+            echo 'file is not allowed';
+            die();
+            echo "</pre>";
+        }    
+        
+    }
 }
 ?>
-
 
 <h1> Welcome to <?php echo $title ?></h1>
 <!-- create a Contact Form  -->
