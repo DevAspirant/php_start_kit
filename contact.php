@@ -6,17 +6,18 @@ echo "information of the POST data: ";
 // validate the upload files 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isset($_FILES['document']) && $_FILES['document']['error'] == 0){
+        echo "<pre style='color:green;'>";
         echo "the file is fine";
+        echo "</pre>";
         // allowed to upload the file types
         $allowed = [
             'jpg'=>'images/jpg',
-            'png'=>'images/png',
             'gif'=>'images/gif'
         ];
 
         $fileType = $_FILES['document']['type'];
         if(!in_array($fileType,$allowed)){
-            echo "<pre>";
+            echo "<pre style='color:red;'>";
             echo 'file is not allowed';
             die();
             echo "</pre>";
