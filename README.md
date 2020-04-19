@@ -9,4 +9,5 @@
 * create config folder with app.php 
 * create template folder with 3 files : [1] footer.php [2] header.php [3] style.css
 * start coding first 
-
+* test OK
+* uploads files 

@@ -13,6 +13,38 @@ function filterString($field){
         return $field;   
     }
 }
+
+// validate file function 
+function canUpload($file){
+        // check the file 
+        echo "<pre style='color:green;'>";
+        echo "the file is fine";
+        echo "</pre>";
+        // allowed to upload the file types
+        $allowed = [
+            'jpg'=>'image/jpg',
+            'gif'=>'image/gif',
+            'png'=>'image/png',
+            'jpeg'=>'image/jpeg'
+        ];
+        /* know the file type $fileType = $_FILES['document']['type']; echo $fileType;*/
+        $fileMimeType = mime_content_type($file['tmp_name']);
+        $maxFileSize = 50 * 1024;
+        $fileSize = $file['size'];
+        echo $fileSize." KB ";
+        // allowed condition 
+        if(!in_array($fileMimeType,$allowed)){
+            // echo "<pre style='color:red;'>";echo 'file is not allowed';die();echo "</pre>";
+            return "file type is not allowed";
+        }
+        
+        // validate the file size 
+        if($fileSize > $maxFileSize){
+            return "File size is not allowed";
+        // close the app die(" max file size, kindly resize the file ".$maxFileSize);
+        }
+        return true;
+}
 // filter the email 
 function filterEmail($field){
     $field = filter_var(trim($field),FILTER_SANITIZE_EMAIL); // clean the email 
@@ -49,35 +81,33 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
 
-    // validate email 
+    // validate document 
     /*if(!filterEmail($_POST['email'])){ echo "<pre style='color:red;'>"; die('your email is incorrect'); echo "</pre>";}*/
     // check the file is clean or not 
     if(isset($_FILES['document']) && $_FILES['document']['error'] == 0){
-        echo "<pre style='color:green;'>";
-        echo "the file is fine";
-        echo "</pre>";
-        // allowed to upload the file types
-        $allowed = [
-            'jpg'=>'image/jpg',
-            'gif'=>'image/gif',
-            'png'=>'image/png'
-        ];
-        /* know the file type $fileType = $_FILES['document']['type']; echo $fileType;*/
-        $fileMimeType = mime_content_type($_FILES['document']['tmp_name']);
-        // allowed condition 
-        if(!in_array($fileMimeType,$allowed)){
-            // echo "<pre style='color:red;'>";echo 'file is not allowed';die();echo "</pre>";
-            $documentError = "file type is not allowed";
-        }    
-        // validate the file size 
-        $maxFileSize = 1 * 1024;
-        $fileSize = $_FILES['document']['size'];
-        echo $fileSize." KB ";
-        if($fileSize > $maxFileSize){
-            $documentError = "File size is not allowed";
-        // close the app die(" max file size, kindly resize the file ".$maxFileSize);
-        
-        } 
+         $canUpload = canUpload($_FILES['document']);
+         // upload the files 
+         $uploadDir = "uploads";
+         if($canUpload === true){
+            // check the if there is a directory for upload the files 
+            if(!is_dir($uploadDir)){
+                umask(0); // for change the permission of the files === chmod
+                // if did not find make the direectory & make a permission 0775 
+                // chmod($uploadDir,0775);
+                mkdir($uploadDir,0775,true);
+            }
+            echo "<h3>you can upload</h3>";
+            $fileName = time().$_FILES['document']['name']; // file name var and upload the file with time stamp
+            // check if the file exiest 
+            if(file_exists($uploadDir.'/'.$fileName)){
+                $documentError = "file is exists";
+            }else{
+                // upload the files 
+                move_uploaded_file($_FILES['document']['tmp_name'],$uploadDir.'/'.$fileName);
+            }
+         }else{
+             $documentError = $canUpload;
+         }
     }
 }
 
@@ -118,6 +148,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </form>
 
 <?php require_once "template/footer.php";
-/* $input = "<script>$('body').html('<h1> you have been hacked</h1>')</script>";
-echo $input;*/
+/* $input = "<script>$('body').html('<h1> you have been hacked</h1>')</script>"; echo $input;*/
 ?>
