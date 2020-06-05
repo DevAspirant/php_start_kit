@@ -11,3 +11,8 @@
 * start coding first 
 * test OK
 * uploads files 
+
+# flex courses brunch 
+* create a sessions [done]
+
+

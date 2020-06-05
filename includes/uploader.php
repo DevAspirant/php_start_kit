@@ -1,3 +1,4 @@
+<!-- this file is for any POST data will be request  -->
 <?php 
 echo "information of the POST data: ";
 /* print the output of POST data : if($_SERVER['REQUEST_METHOD'] == 'POST'){echo "<pre>";print_r($_POST);print_r($_FILES);echo "</pre>";}*/
@@ -64,19 +65,31 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // to show the error message into contact page when the name is empty 
     $name = filterString($_POST['name']);
     if(!$name){
+        $_SESSION['contact_form']['name']=''; 
         $nameError = 'your name is required';
+    }else{
+        // save visitor name sessions 
+        $_SESSION['contant_name']['name'] = $name; // array that store the name session 
     }
     // to show the error message into contact page when the email is empty
     $email = filterEmail($_POST['email']);
     if(!$email){
         $emailError = "invalied email is required";
-    } 
+        $_SESSION['contact_form']['email'] = '';
+    }else{
+        // save visitor email sessions
+        $_SESSION['contact_form']['email'] = $email; // array that store the email session 
+    }
 
     // to show the error message into contact page when the message is empty
     $message = filterString($_POST['message']);
     if(!$message){
         $messageError = "insert your message";
+        $_SESSION['contact_form']['message'] = '';
+    }else{
+        $_SESSION['contact_form']['message'] = $message; // array that store the email session 
     }
+
 
 
     // validate document 
@@ -106,6 +119,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
          }else{
              $documentError = $canUpload;
          }
+    }
+    // delete the sessions 
+    if(!$nameError && !$emailError && !$messageError && !$documentError){
+        // unset($_SESSION['contact_form']);
+        // echo 'session delete';
+
+        session_destroy();
+        header('Location:contact.php');
     }
 }
 ?>

@@ -1,6 +1,7 @@
 <?php 
 $title = "Home Page"; // title var 
-require_once "template/header.php" // include the header file
+require_once "template/header.php"; // include the header file
+$_SESSION['sender_name'] = "Ammar"; // save the session data 
 ?> 
 <!-- set the title var as h1 -->
 <h1> Welcome to <?php echo $config["app_name"]; ?> </h1>
